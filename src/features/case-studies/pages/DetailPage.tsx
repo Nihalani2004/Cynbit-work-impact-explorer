@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
 import { Link, useLocation, useParams } from 'react-router'
+import { useDocumentMetadata } from '../../../app/useDocumentMetadata'
 import { ArrowIcon } from '../../../components/Icons'
 import { NotFoundPage } from '../../../pages/NotFoundPage'
 import { SourceCitations, SourceList } from '../components/EvidenceReferences'
@@ -43,9 +43,13 @@ export function DetailPage() {
   const location = useLocation()
   const study = caseStudies.find((item) => item.slug === slug)
 
-  useEffect(() => {
-    document.title = study ? `${study.title} | Cynbit Work & Impact` : 'Work Profile Not Found | Cynbit Work & Impact'
-  }, [study])
+  useDocumentMetadata({
+    title: study ? `${study.title} | Cynbit Work & Impact` : 'Work Profile Not Found | Cynbit Work & Impact',
+    description: study
+      ? `${study.title}: ${study.descriptor}. Review public sources, evidence limits, documented technology and attributed outcomes.`
+      : 'The requested Cynbit Work & Impact profile is unavailable.',
+    path: study ? `/case-studies/${study.slug}` : '/case-studies',
+  })
 
   if (!study) return <NotFoundPage kind="study" />
 
@@ -58,7 +62,7 @@ export function DetailPage() {
   const isPublishedStudy = study.verificationStatus === 'official-only'
 
   return (
-    <main id="main-content" className="detail-page">
+    <main id="main-content" className="detail-page" tabIndex={-1}>
       <div className="page-width">
         <Link className="back-link" to={`/case-studies${location.search}`}><ArrowIcon /> Back to results</Link>
         <div className="detail-hero">
@@ -98,6 +102,12 @@ export function DetailPage() {
           </aside>
 
           <div className="detail-content__sections">
+            {isPublishedStudy && (
+              <aside className="editorial-note" aria-label="Editorial synthesis note">
+                <strong>Editorial synthesis</strong>
+                <p>The extended context and implementation narrative below synthesize the cited Cynbit page. Numbered references identify source-backed claims; the page does not independently verify the named engagement or its reported results.</p>
+              </aside>
+            )}
             <DetailSection step="01 / CONTEXT" title="Why this work exists." id="context-title" claims={study.context} sources={sources} />
             <DetailSection step="02 / OBJECTIVES" title="What the public brief sets out to achieve." id="objectives-title" claims={study.objectives} sources={sources} />
             <DetailSection step="03 / CHALLENGES" title="The problem being addressed." id="challenges-title" claims={study.challenges} sources={sources} />
@@ -107,7 +117,7 @@ export function DetailPage() {
 
             <section aria-labelledby="technology-title">
               <span className="detail-content__step">07 / TECHNOLOGY</span>
-              <h2 id="technology-title">Project-specific technology evidence.</h2>
+              <h2 id="technology-title">Project-specific technology and capability evidence.</h2>
               {study.technologies.length > 0 ? (
                 <ul className="technology-list">
                   {study.technologies.map((technology) => (

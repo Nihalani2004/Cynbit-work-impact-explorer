@@ -128,7 +128,7 @@ const publishedSeeds: readonly PublishedSeed[] = [
     challenge: 'The published brief says customer demand for proof of organic sourcing was difficult to satisfy through manual processes.',
     solution: 'Cynbit says it built a QR-based tracking system through which customers can view a meal’s journey from farm to table.',
     implementation: [
-      'A scannable QR entry point connects the physical meal or package to its digital sourcing record.',
+      'A scannable QR entry point connects the physical meal to its digital sourcing record.',
       'The page does not describe the ledger design, data contributors, verification controls or why the title calls the approach “blockchain-lite”.',
     ],
     technologies: [{ name: 'QR-based tracking', role: 'Opens a customer-facing record of the published sourcing journey.' }],

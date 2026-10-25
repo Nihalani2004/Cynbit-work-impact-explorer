@@ -47,7 +47,7 @@ export type TechnologyEvidence = {
   sourceIds: readonly string[]
 }
 
-export type MeasurementStatus = 'measured' | 'reported' | 'target' | 'unavailable'
+export type MeasurementStatus = 'measured' | 'reported' | 'target' | 'evidence' | 'unavailable'
 
 export type Outcome = {
   label: string
@@ -99,5 +99,6 @@ export const measurementLabels: Record<MeasurementStatus, string> = {
   measured: 'Measured result',
   reported: 'Publicly reported',
   target: 'Published target',
+  evidence: 'Public evidence',
   unavailable: 'Outcome data unavailable',
 }

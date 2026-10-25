@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { ArrowIcon } from '../../../components/Icons'
-import { categoryLabels, verificationLabels, workTypeLabels, type CaseStudy } from '../model/types'
+import { categoryLabels, measurementLabels, verificationLabels, workTypeLabels, type CaseStudy } from '../model/types'
 import { StudyArtwork } from './StudyArtwork'
 
 type Props = { study: CaseStudy; search: string }
@@ -25,8 +25,8 @@ export function CaseStudyCard({ study, search }: Props) {
           <p>{study.summary.text}</p>
           {(featuredOutcome || study.technologies.length > 0) && (
             <dl className="study-card__facts">
-              {featuredOutcome && <><dt>Reported result</dt><dd>{featuredOutcome.value}</dd></>}
-              {study.technologies.length > 0 && <><dt>Documented technology</dt><dd>{study.technologies.slice(0, 3).map((technology) => technology.name).join(' · ')}</dd></>}
+              {featuredOutcome && <><dt>{measurementLabels[featuredOutcome.measurement]}</dt><dd>{featuredOutcome.value}</dd></>}
+              {study.technologies.length > 0 && <><dt>Technology &amp; capability</dt><dd>{study.technologies.slice(0, 3).map((technology) => technology.name).join(' · ')}</dd></>}
             </dl>
           )}
           <span className="study-card__action">Read documented profile <ArrowIcon /></span>

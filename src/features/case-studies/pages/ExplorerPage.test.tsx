@@ -37,6 +37,8 @@ describe('work explorer interactions', () => {
     expect(screen.getAllByRole('article')).toHaveLength(3)
     expect(screen.getByTestId('location')).toHaveTextContent('/case-studies?category=cloud')
     expect(screen.getByRole('status')).toHaveTextContent('3 documented profiles in Cloud strategy')
+    expect(screen.getByRole('button', { name: 'All work' })).toHaveTextContent('3')
+    expect(screen.getByRole('button', { name: 'Owned products' })).toHaveTextContent('0')
 
     await user.click(screen.getByRole('button', { name: /Clear all filters/ }))
     expect(screen.getAllByRole('article')).toHaveLength(17)
@@ -54,6 +56,7 @@ describe('work explorer interactions', () => {
     expect(screen.getAllByRole('article')).toHaveLength(1)
     expect(screen.getByRole('heading', { name: 'BitElevate' })).toBeVisible()
     expect(screen.getByTestId('location')).toHaveTextContent('/case-studies?category=marketing&type=initiative&q=mentorship')
+    expect(screen.getByRole('button', { name: 'All categories' })).toHaveTextContent('1')
   })
 
   it('shows a useful empty state and recovers', async () => {
@@ -85,6 +88,7 @@ describe('work explorer interactions', () => {
     expect(screen.getAllByText('Node.js').length).toBeGreaterThan(0)
     expect(screen.getByText('2.4M+ daily users · <200ms')).toBeVisible()
     expect(screen.getAllByText(/not been independently confirmed|not independently verify/).length).toBeGreaterThan(0)
+    expect(screen.getByRole('complementary', { name: 'Editorial synthesis note' })).toBeVisible()
     expect(screen.getByRole('heading', { name: 'Sources used in this profile.' })).toBeVisible()
   })
 

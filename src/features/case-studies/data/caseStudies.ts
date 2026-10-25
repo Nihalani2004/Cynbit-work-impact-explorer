@@ -350,7 +350,7 @@ const ownedStudies: readonly CaseStudy[] = [
         label: 'Documented program completion',
         value: '1 public credential record',
         context: 'The reviewed third-party credential page records one participant’s completion of a BitElevate training and internship program.',
-        measurement: 'reported',
+        measurement: 'evidence',
         sourceIds: ['bitelevate-credential'],
         caveat: 'This confirms one public completion record only. It does not validate aggregate training, placement or reach claims.',
       },
