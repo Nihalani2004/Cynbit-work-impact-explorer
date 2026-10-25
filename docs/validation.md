@@ -1,6 +1,6 @@
 # Validation record
 
-Final verification executed locally on 25 October 2026 with Node.js 25.5.0 and npm 11.8.0 on Windows. Deployment was intentionally excluded.
+Final verification executed locally on 26 October 2026 with Node.js 23.7.0 and npm 10.9.2 on Windows. Deployment was intentionally excluded.
 
 ## Automated checks
 
@@ -9,15 +9,15 @@ Final verification executed locally on 25 October 2026 with Node.js 25.5.0 and n
 | `npm run lint` | Passed. |
 | `npm run typecheck` | Passed. |
 | `npm test` | Passed: 3 suites, 19 unit/component tests. |
-| `npm run test:e2e` | Passed: 33 tests across Chromium, Firefox, and WebKit in 2.5 minutes. |
-| `npm run build` | Passed: 62 modules transformed. |
-| `npm run check:bundle` | Passed: JavaScript 99.69 KiB gzip against 150 KiB; CSS 6.02 KiB gzip against 30 KiB. |
+| `npm run test:e2e` | Passed: 42 tests across Chromium, Firefox, and WebKit. |
+| `npm run build` | Passed: 63 modules transformed. |
+| `npm run check:bundle` | Passed: JavaScript 100.28 KiB gzip against 150 KiB; CSS 6.95 KiB gzip against 30 KiB. |
 | `npm audit --json` | Passed: zero reported vulnerabilities across 429 dependencies. This advisory check is not a complete security audit. |
 | `npm run docs:screenshots` | Passed: desktop explorer, 390-pixel Cloud Strategy, and GlobalPay detail screenshots regenerated and visually inspected. |
 
-The browser suite verifies the Software Development 13, Cloud Strategy 3, and Digital Marketing 3 distribution; product, initiative, and 13-entry published-study filters; keyword and verified-technology search; combined criteria; clear controls; empty recovery; result announcements; URL synchronization; browser Back/Forward; direct detail access and refresh; related-profile navigation; return-state preservation; claim citations; first-party outcome caveats; keyboard activation; skip navigation; invalid filters/routes; 320/390/768/1440-pixel layouts; 200% root text scaling; reduced motion; image blocking; no remote runtime request; browser console errors; and axe scans.
+The browser suite verifies the Software Development 13, Cloud Strategy 3, and Digital Marketing 3 distribution; product, initiative, and 13-entry published-study filters; contextual facet counts; keyword and verified-technology search; combined criteria; clear controls; empty recovery; result announcements; URL synchronization; browser Back/Forward; direct detail access and refresh; related-profile navigation; return-state preservation; claim citations; first-party outcome caveats; keyboard activation; focus-moving skip navigation; invalid filters/routes; 320/390/768/1440-pixel layouts; 200% root text scaling; reduced motion; image blocking; no remote runtime request; browser console errors; and axe scans.
 
-Axe found no serious or critical violations on the listing, empty state, owned detail, or published-study detail route in Chromium, Firefox, and WebKit. Automated scanning does not replace evaluation with real assistive technology.
+Axe found no serious or critical violations on the listing, empty state, owned detail, published-study detail, card-hover, or card-keyboard-focus states in Chromium, Firefox, and WebKit. Automated scanning does not replace evaluation with real assistive technology.
 
 ## Content validation
 
@@ -33,9 +33,9 @@ Axe found no serious or critical violations on the listing, empty state, owned d
 
 ## Browser and visual review
 
-- Chromium: 11/11 browser tests passed.
-- Firefox: 11/11 browser tests passed.
-- WebKit: 11/11 browser tests passed.
+- Chromium: 14/14 browser tests passed.
+- Firefox: 14/14 browser tests passed.
+- WebKit: 14/14 browser tests passed.
 - The 1440-pixel explorer, 390-pixel Cloud Strategy view, and 1440-pixel GlobalPay detail view were regenerated and inspected.
 - No unintended horizontal overflow was detected at tested widths or with 200% root text scaling.
 - Detail pages use a readable two-column desktop hierarchy and a single-column mobile reflow.
@@ -58,4 +58,4 @@ Axe found no serious or critical violations on the listing, empty state, owned d
 - Lighthouse and field Core Web Vitals were not measured. Bundle budgets, runtime-network independence, and console checks provide local safeguards without implying field performance.
 - The thirteen published project stories and their metrics remain first-party claims without independent client corroboration or public methodology.
 - External reference pages can change after the recorded access date.
-- The current directory is not recognized as a Git repository, and no Git history or remote operation was created.
+- The repository has local Git history. No commit, push, pull request, deployment, or remote mutation was performed as part of this validation.

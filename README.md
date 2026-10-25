@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/React-19-087e8b?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7-646cff?logo=vite&logoColor=white)](https://vite.dev/)
-[![Tests](https://img.shields.io/badge/tests-32%20passing-087e8b)](#quality-assurance)
+[![Tests](https://img.shields.io/badge/tests-61%20passing-087e8b)](#quality-assurance)
 
 ![Cynbit Work & Impact desktop explorer](docs/screenshots/explorer-desktop.png)
 
@@ -23,7 +23,7 @@ The experience is designed to answer three questions immediately:
 
 | Portfolio concern | Improvement delivered |
 | --- | --- |
-| Static, hard-to-explore content | Dynamic category and work-type filters, combined keyword search, result counts, empty states, and reset controls |
+| Static, hard-to-explore content | Dynamic category and work-type filters, contextual result counts, combined keyword search, empty states, and reset controls |
 | Unclear credibility of project claims | Sourced profiles, evidence labels, numbered references, attribution, and visible limitations on every detail page |
 | Temporary fictional prototype content | Replaced with four Cynbit-owned products/initiatives and thirteen case studies published by Cynbit |
 | Shallow project presentation | Reusable detail views for context, objectives, challenges, solution, execution, technology, outcomes, evidence limits, and related work |
@@ -37,7 +37,7 @@ The experience is designed to answer three questions immediately:
 - **Three preserved service categories**: Software Development (13), Cloud Strategy (3), and Digital Marketing (3).
 - **Evidence-first detail pages**: source references, outcome attribution, and limitations live alongside the project narrative.
 - **Professional discovery flow**: responsive card grid, focused card hover/focus treatment, related work, and a compact header logo reconstructed as a scalable SVG.
-- **Thoughtful motion**: only decorative elements fade; readable content stays opaque to preserve contrast. Motion is disabled for users who prefer reduced motion.
+- **Thoughtful motion**: the active card rises while peer content stays fully readable; only decorative artwork becomes slightly subdued. Motion is disabled for users who prefer reduced motion.
 
 ## Architecture
 
@@ -133,11 +133,11 @@ The latest local verification completed successfully:
 | ESLint | Passed |
 | TypeScript | Passed |
 | Unit and component tests | 19 passed |
-| Chromium end-to-end tests | 13 passed |
-| Automated serious/critical axe violations | None found on listing, empty-state, and detail journeys |
+| Chromium end-to-end tests | 14 passed |
+| Automated serious/critical axe violations | None found on listing, empty-state, detail, hover, and keyboard-focus journeys |
 | Production build | Passed |
 
-The browser coverage includes filtering, multi-criteria search, invalid query recovery, URL synchronization, Back/Forward behavior, direct detail routes, refreshes, retained return state, keyboard navigation, responsive layouts, console errors, and key accessibility journeys.
+The browser coverage includes filtering, contextual facet counts, multi-criteria search, invalid query recovery, URL synchronization, Back/Forward behavior, direct detail routes, refreshes, retained return state, keyboard navigation, responsive layouts, console errors, metadata, and default plus hover/focus accessibility journeys.
 
 ## Demo journey
 
@@ -160,4 +160,4 @@ The browser coverage includes filtering, multi-criteria search, invalid query re
 
 ## Originality and attribution
 
-The public [Cynbit website](https://www.cynbit.in/) informed the teal palette, rounded controls, and broad visual language. Public facts link to their source material. All application code, component structure, CSS artwork, SVG treatment, documentation, summaries, evidence notes, and tests are original to this prototype. No Cynbit source code, private API, client asset, product screenshot, or proprietary implementation was copied.
+The public [Cynbit website](https://www.cynbit.in/) informed the teal palette, rounded controls, and broad visual language. The header mark is a code-drawn reference to Cynbit's public logo and remains Cynbit's brand mark. Public facts link to their source material. All application code, component structure, CSS artwork, documentation, summaries, evidence notes, and tests are original to this prototype. No Cynbit source code, private API, client asset, product screenshot, or proprietary implementation was copied.
