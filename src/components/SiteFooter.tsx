@@ -12,7 +12,7 @@ export function SiteFooter() {
         </div>
         <div className="site-footer__links">
           <Link to="/case-studies">Explore all work <ArrowIcon /></Link>
-          <a href="https://www.cynbit.in/contact" target="_blank" rel="noopener noreferrer">Visit Cynbit contact <ArrowIcon /></a>
+          <a href="https://www.cynbit.in/contact" target="_blank" rel="noopener noreferrer">Visit Cynbit contact <ArrowIcon /><span className="visually-hidden"> (opens in a new tab)</span></a>
         </div>
       </div>
     </footer>

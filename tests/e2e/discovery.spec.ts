@@ -42,7 +42,7 @@ test('initial root redirect announces the page without outlining the route headi
   ).toBeGreaterThan(0.8)
 })
 
-test('hover and keyboard focus spotlight one case-study card without hiding its peers', async ({ page }) => {
+test('hover and keyboard focus spotlight one case-study card while preserving peer readability', async ({ page }) => {
   await page.goto('/case-studies')
   const cards = page.locator('article.study-card')
   const activeCard = cards.nth(1)
@@ -50,11 +50,11 @@ test('hover and keyboard focus spotlight one case-study card without hiding its 
 
   await activeCard.hover()
   await expect.poll(() => activeCard.evaluate((element) => getComputedStyle(element).zIndex)).toBe('1')
-  await expect.poll(() => backgroundCard.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeLessThan(0.7)
+  await expect.poll(() => backgroundCard.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBe(1)
 
   await backgroundCard.getByRole('link').focus()
   await expect.poll(() => backgroundCard.evaluate((element) => getComputedStyle(element).zIndex)).toBe('1')
-  await expect.poll(() => activeCard.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeLessThan(0.7)
+  await expect.poll(() => activeCard.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBe(1)
 })
 
 test('category, type, search, empty state and clearing work together', async ({ page }) => {
@@ -85,6 +85,8 @@ test('direct detail navigation, citations, refresh and return preserve discovery
   await page.getByRole('link', { name: /TenantEase/ }).click()
   await expect(page).toHaveURL('/case-studies/tenantease?category=software&type=product&q=payments')
   await expect(page.getByRole('heading', { name: 'TenantEase' })).toBeFocused()
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /TenantEase/)
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/case-studies\/tenantease$/)
   await expect(page.getByRole('complementary', { name: 'Work profile summary' }).getByText('Cynbit-owned product', { exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Sources used in this profile.' })).toBeVisible()
   await expect(page.getByRole('link', { name: /Source 1:/ }).first()).toBeVisible()
@@ -116,7 +118,8 @@ test('published case studies expose implementation evidence, attributed outcomes
   await expect(page).toHaveURL('/case-studies/fintech-payments-evolution?category=software&type=published-study&q=Kubernetes')
   await expect(page.getByRole('heading', { name: 'GlobalPay' })).toBeFocused()
   await expect(page.getByText(/published by Cynbit; the named engagement and reported outcomes have not been independently confirmed/)).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Project-specific technology evidence.' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Project-specific technology and capability evidence.' })).toBeVisible()
+  await expect(page.getByRole('complementary', { name: 'Editorial synthesis note' })).toBeVisible()
   await expect(page.locator('.technology-list').getByText('PostgreSQL', { exact: true })).toBeVisible()
   await expect(page.getByText(/No independent measurement method/)).toBeVisible()
   await expect(page.getByRole('link', { name: /Source 2: Cross-Border Payments Evolution/ }).first()).toBeVisible()
@@ -180,6 +183,7 @@ test('skip navigation is first in the focus order and keyboard operable', async 
   await expect(skipLink).toBeVisible()
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/#main-content$/)
+  await expect(page.getByRole('main')).toBeFocused()
 })
 
 test('the core journey has no remote runtime dependency', async ({ page }) => {
@@ -216,4 +220,17 @@ test('listing, empty state and detail have no serious automated accessibility vi
     const results = await new AxeBuilder({ page }).analyze()
     expect(results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? '')), path).toEqual([])
   }
+})
+
+test('hover and keyboard spotlight states have no serious automated accessibility violations', async ({ page }) => {
+  await page.goto('/case-studies')
+  const cards = page.locator('article.study-card')
+
+  await cards.nth(1).hover()
+  let results = await new AxeBuilder({ page }).analyze()
+  expect(results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? ''))).toEqual([])
+
+  await cards.nth(0).getByRole('link').focus()
+  results = await new AxeBuilder({ page }).analyze()
+  expect(results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? ''))).toEqual([])
 })

@@ -1,5 +1,6 @@
-import { useEffect, useMemo, type CSSProperties } from 'react'
+import { useMemo, type CSSProperties } from 'react'
 import { Link, useLocation, useSearchParams } from 'react-router'
+import { useDocumentMetadata } from '../../../app/useDocumentMetadata'
 import { ArrowIcon } from '../../../components/Icons'
 import { CaseStudyCard } from '../components/CaseStudyCard'
 import { CategoryFilters } from '../components/CategoryFilters'
@@ -34,25 +35,32 @@ export function ExplorerPage() {
   const hasCriteria = category !== null || workType !== null || query !== '' || invalidCategory || invalidWorkType
   const featured = caseStudies.find((study) => study.featured)
 
-  const categoryOptions = categories
-    .map((value) => ({
-      value,
-      label: categoryLabels[value],
-      count: caseStudies.filter((study) => study.categories.includes(value)).length,
-    }))
-    .filter((option) => option.count > 0)
+  const categoryOptions = useMemo(() => categories.map((value) => ({
+    value,
+    label: categoryLabels[value],
+    count: filterStudies(caseStudies, { category: value, workType, query }).length,
+  })), [workType, query])
 
-  const workTypeOptions = workTypes
-    .map((value) => ({
-      value,
-      label: workTypeLabels[value],
-      count: caseStudies.filter((study) => study.workType === value).length,
-    }))
-    .filter((option) => option.count > 0)
+  const workTypeOptions = useMemo(() => workTypes.map((value) => ({
+    value,
+    label: workTypeLabels[value],
+    count: filterStudies(caseStudies, { category, workType: value, query }).length,
+  })), [category, query])
 
-  useEffect(() => {
-    document.title = 'Cynbit Work & Impact | Independent Prototype'
-  }, [])
+  const allCategoriesCount = useMemo(
+    () => filterStudies(caseStudies, { category: null, workType, query }).length,
+    [workType, query],
+  )
+  const allWorkCount = useMemo(
+    () => filterStudies(caseStudies, { category, workType: null, query }).length,
+    [category, query],
+  )
+
+  useDocumentMetadata({
+    title: 'Cynbit Work & Impact | Independent Prototype',
+    description: 'Explore sourced Cynbit-owned products and Cynbit-published work with clear evidence limits, search, filters and detailed public profiles.',
+    path: '/case-studies',
+  })
 
   function update(next: ExplorerCriteria) {
     const params = toSearchParams(next)
@@ -79,7 +87,7 @@ export function ExplorerPage() {
   const countText = `${results.length} documented ${results.length === 1 ? 'profile' : 'profiles'}${qualifiers ? ` ${qualifiers}` : ''}`
 
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <section className="explorer-hero page-width" aria-labelledby="explorer-title">
         <div className="explorer-hero__copy">
           <span className="eyebrow"><span className="eyebrow__dot" aria-hidden="true" /> Work, evidence and limits</span>
@@ -147,7 +155,8 @@ export function ExplorerPage() {
               workTypes={workTypeOptions}
               selectedCategory={category}
               selectedWorkType={workType}
-              totalCount={caseStudies.length}
+              allCategoriesCount={allCategoriesCount}
+              allWorkCount={allWorkCount}
               onCategorySelect={updateCategory}
               onWorkTypeSelect={updateWorkType}
             />

@@ -7,7 +7,8 @@ type Props = {
   workTypes: readonly FilterOption<WorkType>[]
   selectedCategory: Category | null
   selectedWorkType: WorkType | null
-  totalCount: number
+  allCategoriesCount: number
+  allWorkCount: number
   onCategorySelect: (category: Category | null) => void
   onWorkTypeSelect: (workType: WorkType | null) => void
 }
@@ -21,7 +22,8 @@ export function CategoryFilters({
   workTypes: workTypeOptions,
   selectedCategory,
   selectedWorkType,
-  totalCount,
+  allCategoriesCount,
+  allWorkCount,
   onCategorySelect,
   onWorkTypeSelect,
 }: Props) {
@@ -31,7 +33,7 @@ export function CategoryFilters({
         <legend>Category</legend>
         <div className="category-filters">
           <button type="button" className="filter-chip" aria-pressed={selectedCategory === null} onClick={() => onCategorySelect(null)}>
-            <FilterLabel label="All categories" count={totalCount} />
+            <FilterLabel label="All categories" count={allCategoriesCount} />
           </button>
           {categoryOptions.map((option) => (
             <button type="button" className="filter-chip" aria-pressed={selectedCategory === option.value} onClick={() => onCategorySelect(option.value)} key={option.value}>
@@ -44,7 +46,7 @@ export function CategoryFilters({
         <legend>Work type</legend>
         <div className="category-filters">
           <button type="button" className="filter-chip" aria-pressed={selectedWorkType === null} onClick={() => onWorkTypeSelect(null)}>
-            <FilterLabel label="All work" count={totalCount} />
+            <FilterLabel label="All work" count={allWorkCount} />
           </button>
           {workTypeOptions.map((option) => (
             <button type="button" className="filter-chip" aria-pressed={selectedWorkType === option.value} onClick={() => onWorkTypeSelect(option.value)} key={option.value}>

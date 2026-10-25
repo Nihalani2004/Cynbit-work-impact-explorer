@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { CloseIcon, SearchIcon } from '../../../components/Icons'
 
 type Props = {
@@ -8,6 +8,10 @@ type Props = {
 
 export function SearchForm({ query, onSearch }: Props) {
   const [draft, setDraft] = useState(query)
+
+  useEffect(() => {
+    setDraft(query)
+  }, [query])
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()

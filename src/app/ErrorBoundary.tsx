@@ -17,7 +17,7 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <main id="main-content" className="not-found page-width">
+        <main id="main-content" className="not-found page-width" tabIndex={-1}>
           <h1>We could not display this view.</h1>
           <p>Please reload the page. If the problem continues, use the main explorer link.</p>
           <a className="button button--primary" href="/case-studies">Open the explorer</a>
