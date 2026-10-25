@@ -1,5 +1,11 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+async function expectNoSeriousAxeViolations(page: Page) {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  const results = await new AxeBuilder({ page }).analyze()
+  expect(results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? ''))).toEqual([])
+}
 
 test('dynamic category and work-type controls expose the documented distribution', async ({ page }) => {
   await page.goto('/case-studies')
@@ -216,8 +222,7 @@ test('primary routes render without browser console errors', async ({ page }) =>
 test('listing, empty state and detail have no serious automated accessibility violations', async ({ page }) => {
   for (const path of ['/case-studies', '/case-studies?q=unmatched', '/case-studies/cynbit-studio', '/case-studies/fintech-payments-evolution']) {
     await page.goto(path)
-    const results = await new AxeBuilder({ page }).analyze()
-    expect(results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? '')), path).toEqual([])
+    await expectNoSeriousAxeViolations(page)
   }
 })
 
@@ -226,10 +231,8 @@ test('hover and keyboard spotlight states have no serious automated accessibilit
   const cards = page.locator('article.study-card')
 
   await cards.nth(1).hover()
-  let results = await new AxeBuilder({ page }).analyze()
-  expect(results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? ''))).toEqual([])
+  await expectNoSeriousAxeViolations(page)
 
   await cards.nth(0).getByRole('link').focus()
-  results = await new AxeBuilder({ page }).analyze()
-  expect(results.violations.filter((item) => ['critical', 'serious'].includes(item.impact ?? ''))).toEqual([])
+  await expectNoSeriousAxeViolations(page)
 })
