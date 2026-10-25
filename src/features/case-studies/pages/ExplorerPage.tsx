@@ -62,17 +62,25 @@ export function ExplorerPage() {
     path: '/case-studies',
   })
 
-  function update(next: ExplorerCriteria) {
-    const params = toSearchParams(next)
-    if (params.toString() !== searchParams.toString()) setSearchParams(params)
+  function update(patch: Partial<ExplorerCriteria>) {
+    setSearchParams((currentSearchParams) => {
+      const current = parseQuery(currentSearchParams.toString())
+      const next: ExplorerCriteria = {
+        category: patch.category === undefined ? current.category : patch.category,
+        workType: patch.workType === undefined ? current.workType : patch.workType,
+        query: patch.query === undefined ? current.query : patch.query,
+      }
+      const params = toSearchParams(next)
+      return params.toString() === currentSearchParams.toString() ? currentSearchParams : params
+    })
   }
 
   function updateCategory(value: Category | null) {
-    update({ category: value, workType, query })
+    update({ category: value })
   }
 
   function updateWorkType(value: WorkType | null) {
-    update({ category, workType: value, query })
+    update({ workType: value })
   }
 
   function clearAll() {
@@ -149,7 +157,7 @@ export function ExplorerPage() {
           </div>
 
           <div className="explorer-controls">
-            <SearchForm key={query} query={query} onSearch={(value) => update({ category, workType, query: value })} />
+            <SearchForm key={query} query={query} onSearch={(value) => update({ query: value })} />
             <CategoryFilters
               categories={categoryOptions}
               workTypes={workTypeOptions}
