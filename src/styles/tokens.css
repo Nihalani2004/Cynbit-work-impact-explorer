@@ -1,0 +1,16 @@
+:root {
+  --paper: #f9fcfa;
+  --surface: #f2f7f5;
+  --ink: #102a2b;
+  --muted: #526b69;
+  --teal: #087a81;
+  --teal-deep: #075b62;
+  --teal-soft: #dcefeb;
+  --sand: #eac99e;
+  --sand-soft: #fae8c9;
+  --line: #dce9e5;
+  --focus: #b37415;
+  --focus-soft: rgba(179, 116, 21, .28);
+  --font-body: 'Segoe UI', 'Aptos', Arial, sans-serif;
+  --font-display: 'Arial Black', 'Segoe UI', Arial, sans-serif;
+}
