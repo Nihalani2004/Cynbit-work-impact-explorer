@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useLayoutEffect, useState, type FormEvent } from 'react'
 import { CloseIcon, SearchIcon } from '../../../components/Icons'
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 export function SearchForm({ query, onSearch }: Props) {
   const [draft, setDraft] = useState(query)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setDraft(query)
   }, [query])
 

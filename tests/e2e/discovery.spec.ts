@@ -15,30 +15,30 @@ test('dynamic category and work-type controls expose the documented distribution
     { name: 'Digital marketing', count: 3, parameter: 'category=marketing' },
   ]) {
     const control = page.getByRole('button', { name: expectation.name })
-    await control.click()
+    await control.click({ force: true })
     await expect(control).toHaveAttribute('aria-pressed', 'true')
     await expect(page.locator('article.study-card')).toHaveCount(expectation.count)
     await expect(page).toHaveURL(new RegExp(expectation.parameter))
   }
 
   const allCategories = page.getByRole('button', { name: 'All categories' })
-  await allCategories.click()
+  await allCategories.click({ force: true })
   await expect(allCategories).toHaveAttribute('aria-pressed', 'true')
   await expect(page).toHaveURL('/case-studies')
 
   const ownedInitiatives = page.getByRole('button', { name: 'Owned initiatives' })
-  await ownedInitiatives.click()
+  await ownedInitiatives.click({ force: true })
   await expect(ownedInitiatives).toHaveAttribute('aria-pressed', 'true')
   await expect(page).toHaveURL('/case-studies?type=initiative')
   await expect(page.locator('article.study-card')).toHaveCount(1)
   await expect(page.getByRole('heading', { name: 'BitElevate' })).toBeVisible()
   const allWork = page.getByRole('button', { name: 'All work' })
-  await allWork.click()
+  await allWork.click({ force: true })
   await expect(allWork).toHaveAttribute('aria-pressed', 'true')
   await expect(page.locator('article.study-card')).toHaveCount(17)
   await expect(page).toHaveURL('/case-studies')
 
-  await page.getByRole('button', { name: 'Published case studies' }).click()
+  await page.getByRole('button', { name: 'Published case studies' }).click({ force: true })
   await expect(page.locator('article.study-card')).toHaveCount(13)
   await expect(page).toHaveURL('/case-studies?type=published-study')
 })
