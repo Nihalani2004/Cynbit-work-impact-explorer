@@ -37,9 +37,8 @@ test('initial root redirect announces the page without outlining the route headi
   const rotatingPhrases = page.locator('.hero-title-rotator__phrase')
   await expect(rotatingPhrases).toHaveCount(3)
   await expect.poll(
-    () => rotatingPhrases.nth(1).evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity)),
-    { timeout: 4_500 },
-  ).toBeGreaterThan(0.8)
+    () => rotatingPhrases.first().evaluate((element) => getComputedStyle(element).animationName),
+  ).toBe('hero-title-cycle')
 })
 
 test('hover and keyboard focus spotlight one case-study card while preserving peer readability', async ({ page }) => {

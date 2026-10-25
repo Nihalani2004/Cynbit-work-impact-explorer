@@ -58,12 +58,12 @@ main h1[tabindex="-1"]:focus-visible { outline: none; }
 }
 .explorer-hero h1 em, .section-intro h2 em { color: var(--teal); font-style: italic; font-family: Georgia, serif; font-weight: 700; letter-spacing: -.08em; }
 .hero-title-rotator { display: grid; min-height: 1.08em; margin-top: .08em; font-size: .82em; line-height: 1.05; }
-.hero-title-rotator__phrase { grid-area: 1 / 1; display: block; opacity: 0; transform: translateY(.2em); animation: hero-title-cycle 9s cubic-bezier(.22,.7,.2,1) infinite; }
+.hero-title-rotator__phrase { grid-area: 1 / 1; display: block; visibility: hidden; opacity: 0; transform: translateY(.2em); animation: hero-title-cycle 9s cubic-bezier(.22,.7,.2,1) infinite; }
 .hero-title-rotator__phrase:nth-child(2) { animation-delay: 3s; }
 .hero-title-rotator__phrase:nth-child(3) { animation-delay: 6s; }
 @keyframes hero-title-cycle {
-  0%, 28% { opacity: 1; transform: translateY(0); }
-  33%, 100% { opacity: 0; transform: translateY(-.18em); }
+  0%, 28% { visibility: visible; opacity: 1; transform: translateY(0); }
+  33%, 100% { visibility: hidden; opacity: 0; transform: translateY(-.18em); }
 }
 .explorer-hero__copy > p { max-width: 600px; margin: 0; color: var(--muted); font-size: clamp(16px, 1.3vw, 19px); line-height: 1.7; }
 .hero-anchor { width: fit-content; min-height: 56px; display: inline-flex; align-items: center; gap: 18px; margin-top: 36px; padding: 0 26px; border-radius: 999px; background: var(--teal-deep); color: white; text-decoration: none; font-weight: 750; box-shadow: 0 14px 34px rgba(6,87,94,.16); transition: transform .2s ease, box-shadow .2s ease; }
@@ -337,6 +337,6 @@ main h1[tabindex="-1"]:focus-visible { outline: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .hero-title-rotator__phrase { animation: none !important; opacity: 0; transform: none; }
-  .hero-title-rotator__phrase:first-child { opacity: 1; }
+  .hero-title-rotator__phrase { animation: none !important; visibility: hidden; opacity: 0; transform: none; }
+  .hero-title-rotator__phrase:first-child { visibility: visible; opacity: 1; }
 }
