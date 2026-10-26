@@ -21,10 +21,7 @@ main h1[tabindex="-1"]:focus-visible { outline: none; }
 .site-header { position: relative; z-index: 10; background: rgba(250,252,251,.96); border-bottom: 1px solid var(--line); }
 .site-header__bar { min-height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .brand { display: inline-flex; align-items: center; text-decoration: none; }
-.brand__logo { width: 126px; height: 60px; overflow: visible; color: var(--teal-deep); }
-.brand__loop { fill: none; stroke: currentColor; stroke-width: 2.9; stroke-linecap: round; stroke-linejoin: round; }
-.brand__letters { fill: currentColor; font-family: Georgia, 'Times New Roman', serif; font-size: 21px; font-weight: 400; letter-spacing: -1.15px; }
-.brand__letters--right { font-size: 20px; letter-spacing: -1.4px; }
+.brand__logo { display: block; width: 126px; height: auto; }
 .site-nav { display: flex; align-items: center; gap: 36px; font-size: 11px; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
 .site-nav a { display: inline-flex; align-items: center; gap: 7px; min-height: 42px; text-decoration: none; transition: color .18s ease; }
 .site-nav a:hover, .site-nav__active { color: var(--teal) !important; }

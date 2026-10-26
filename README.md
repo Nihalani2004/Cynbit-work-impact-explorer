@@ -174,4 +174,4 @@ The browser coverage includes filtering, contextual facet counts, multi-criteria
 
 ## Originality and attribution
 
-The public [Cynbit website](https://www.cynbit.in/) informed the teal palette, rounded controls, and broad visual language. The header mark is a code-drawn reference to Cynbit's public logo and remains Cynbit's brand mark. Public facts link to their source material. All application code, component structure, CSS artwork, documentation, summaries, evidence notes, and tests are original to this prototype. No Cynbit source code, private API, client asset, product screenshot, or proprietary implementation was copied.
+The public [Cynbit website](https://www.cynbit.in/) informed the teal palette, rounded controls, and broad visual language. The header uses Cynbit's publicly served logo vector as the brand reference; the mark remains Cynbit's property. Public facts link to their source material. All application code, component structure, CSS artwork, documentation, summaries, evidence notes, and tests are original to this prototype. No Cynbit source code, private API, client asset, product screenshot, or proprietary implementation was copied.
