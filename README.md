@@ -124,6 +124,20 @@ npm run check:bundle
 
 The Playwright suite needs its browser binaries. If they are unavailable, run `npx playwright install`.
 
+## Deploy to Vercel
+
+This repository is ready for a Git-connected Vercel deployment. [vercel.json](vercel.json) sets Vite's build output and rewrites every non-file route to `index.html`. That rewrite is required for direct case-study URLs and browser refreshes because the application uses client-side routing.
+
+1. Sign in to [Vercel](https://vercel.com/) with GitHub.
+2. Select **Add New…** and then **Project**.
+3. Import `Nihalani2004/Cynbit-work-impact-explorer` and approve access when prompted.
+4. Keep the repository root as the root directory. Vercel detects Vite; confirm the build command is `npm run build` and the output directory is `dist`.
+5. Select **Deploy**. The first deployment creates a production URL ending in `vercel.app`.
+6. Open the production URL and verify `/case-studies`, a direct detail URL such as `/case-studies/tenantease`, a refresh on that detail page, a combined search/filter URL, and browser Back/Forward.
+7. Under **Settings → Domains**, optionally add a custom domain. Under **Settings → Git**, keep `main` as the production branch.
+
+No environment variables, private APIs, or database configuration are required. Each subsequent push to `main` creates a production deployment; pull requests receive preview deployments.
+
 ## Quality assurance
 
 The latest local verification completed successfully:
@@ -156,7 +170,7 @@ The browser coverage includes filtering, contextual facet counts, multi-criteria
 - Cynbit Studio, TenantEase, and Revio sources do not disclose a project-specific technology stack or measured adoption.
 - The BitElevate credential is one public completion record and does not establish programme-wide outcomes.
 - External source pages can change after the recorded access date.
-- Search is a small local index, and deployment/hosted-route smoke testing is intentionally out of scope.
+- Search is a small local index. Complete the hosted-route smoke test after publishing, especially for direct detail URLs and refreshes.
 
 ## Originality and attribution
 
