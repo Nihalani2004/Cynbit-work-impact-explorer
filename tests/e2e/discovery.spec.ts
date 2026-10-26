@@ -9,6 +9,7 @@ async function expectNoSeriousAxeViolations(page: Page) {
 
 test('dynamic category and work-type controls expose the documented distribution', async ({ page }) => {
   await page.goto('/case-studies')
+  await expect(page.getByRole('link', { name: 'Open comparison' })).toBeVisible()
   for (const expectation of [
     { name: 'Software development', count: 13, parameter: 'category=software' },
     { name: 'Cloud strategy', count: 3, parameter: 'category=cloud' },
@@ -113,6 +114,29 @@ test('direct detail navigation, citations, refresh and return preserve discovery
   await expect(page.getByRole('button', { name: 'Software development' })).toHaveAttribute('aria-pressed', 'true')
   await expect(page.getByRole('button', { name: 'Owned products' })).toHaveAttribute('aria-pressed', 'true')
   await expect(page).toHaveURL('/case-studies?category=software&type=product&q=payments')
+})
+
+test('comparison keeps selected profiles, evidence limits and discovery state in the URL', async ({ page }) => {
+  await page.goto('/case-studies?category=software&compare=cynbit-studio,tenantease')
+  await expect(page.getByRole('complementary', { name: 'Comparison selection' })).toContainText('2 of 3 profiles selected')
+  await page.getByRole('link', { name: 'Compare profiles' }).click()
+  await expect(page).toHaveURL('/case-studies/compare?category=software&compare=cynbit-studio,tenantease')
+  await expect(page.getByRole('heading', { name: 'Compare the public record.' })).toBeFocused()
+  await expect(page.getByRole('table')).toBeVisible()
+  await expect(page.getByRole('rowheader', { name: 'Outcomes and evidence' })).toBeVisible()
+  await expect(page.getByText('No project-specific technology is publicly documented.').first()).toBeVisible()
+  await page.reload()
+  await expect(page.getByRole('table')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Remove Cynbit Studio from comparison' }).first().click()
+  await expect(page).toHaveURL('/case-studies/compare?category=software&compare=tenantease')
+  await expect(page.getByRole('heading', { name: 'Choose one more profile to compare.' })).toBeVisible()
+
+  await page.goto('/case-studies/compare?compare=missing,tenantease,tenantease,revio,bitelevate,cynbit-studio')
+  await expect(page.getByText(/Unavailable, duplicate or excess comparison selections were omitted/)).toBeVisible()
+  await expect(page.getByRole('table').getByRole('columnheader')).toHaveCount(4)
+  await page.setViewportSize({ width: 390, height: 900 })
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), 'comparison fits a narrow viewport').toBe(false)
 })
 
 test('related-profile navigation retains the discovery query', async ({ page }) => {
@@ -221,7 +245,7 @@ test('primary routes render without browser console errors', async ({ page }) =>
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()) })
-  for (const path of ['/case-studies', '/case-studies?category=marketing&type=initiative&q=mentorship', '/case-studies/bitelevate', '/case-studies/fintech-payments-evolution']) {
+  for (const path of ['/case-studies', '/case-studies?category=marketing&type=initiative&q=mentorship', '/case-studies/bitelevate', '/case-studies/fintech-payments-evolution', '/case-studies/compare?compare=cynbit-studio,tenantease']) {
     await page.goto(path)
     await expect(page.getByRole('main')).toBeVisible()
   }
@@ -229,7 +253,7 @@ test('primary routes render without browser console errors', async ({ page }) =>
 })
 
 test('listing, empty state and detail have no serious automated accessibility violations', async ({ page }) => {
-  for (const path of ['/case-studies', '/case-studies?q=unmatched', '/case-studies/cynbit-studio', '/case-studies/fintech-payments-evolution']) {
+  for (const path of ['/case-studies', '/case-studies?q=unmatched', '/case-studies/cynbit-studio', '/case-studies/fintech-payments-evolution', '/case-studies/compare?compare=cynbit-studio,tenantease']) {
     await page.goto(path)
     await expectNoSeriousAxeViolations(page)
   }

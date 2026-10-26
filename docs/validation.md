@@ -1,6 +1,6 @@
 # Validation record
 
-Final verification executed locally on 26 October 2026 with Node.js 23.7.0 and npm 10.9.2 on Windows. Deployment was intentionally excluded.
+Final verification executed locally on 27 October 2026 on Windows. Deployment was intentionally excluded.
 
 ## Automated checks
 
@@ -8,16 +8,18 @@ Final verification executed locally on 26 October 2026 with Node.js 23.7.0 and n
 | --- | --- |
 | `npm run lint` | Passed. |
 | `npm run typecheck` | Passed. |
-| `npm test` | Passed: 3 suites, 19 unit/component tests. |
-| `npm run test:e2e` | Passed: 42 tests across Chromium, Firefox, and WebKit. |
-| `npm run build` | Passed: 63 modules transformed. |
-| `npm run check:bundle` | Passed: JavaScript 100.28 KiB gzip against 150 KiB; CSS 6.95 KiB gzip against 30 KiB. |
+| `npm test` | Passed: 3 suites, 22 unit/component tests. |
+| `npm run test:e2e -- --project=chromium` | Passed: 15 browser tests. |
+| `npm run test:e2e -- --project=firefox` | Passed: 15 browser tests. |
+| `npm run test:e2e -- --project=webkit` | Passed: 15 browser tests. |
+| `npm run build` | Passed: 68 modules transformed. |
+| `npm run check:bundle` | Passed: JavaScript 102.50 KiB gzip against 150 KiB; CSS 8.36 KiB gzip against 30 KiB. |
 | `npm audit --json` | Passed: zero reported vulnerabilities across 429 dependencies. This advisory check is not a complete security audit. |
 | `npm run docs:screenshots` | Passed: desktop explorer, 390-pixel Cloud Strategy, and GlobalPay detail screenshots regenerated and visually inspected. |
 
-The browser suite verifies the Software Development 13, Cloud Strategy 3, and Digital Marketing 3 distribution; product, initiative, and 13-entry published-study filters; contextual facet counts; keyword and verified-technology search; combined criteria; clear controls; empty recovery; result announcements; URL synchronization; browser Back/Forward; direct detail access and refresh; related-profile navigation; return-state preservation; claim citations; first-party outcome caveats; keyboard activation; focus-moving skip navigation; invalid filters/routes; 320/390/768/1440-pixel layouts; 200% root text scaling; reduced motion; image blocking; no remote runtime request; browser console errors; and axe scans.
+The browser suite verifies the Software Development 13, Cloud Strategy 3, and Digital Marketing 3 distribution; product, initiative, and 13-entry published-study filters; contextual facet counts; keyword and verified-technology search; combined criteria; clear controls; empty recovery; result announcements; URL synchronization; browser Back/Forward; direct detail access and refresh; related-profile navigation; return-state preservation; two-to-three-profile comparison selection, refresh, removal, invalid/duplicate/excess recovery, and narrow-screen reflow; claim citations; first-party outcome caveats; keyboard activation; focus-moving skip navigation; invalid filters/routes; 320/390/768/1440-pixel layouts; 200% root text scaling; reduced motion; image blocking; no remote runtime request; browser console errors; and axe scans.
 
-Axe found no serious or critical violations on the listing, empty state, owned detail, published-study detail, card-hover, or card-keyboard-focus states in Chromium, Firefox, and WebKit. Automated scanning does not replace evaluation with real assistive technology.
+Axe found no serious or critical violations on the listing, empty state, owned detail, published-study detail, comparison workspace, card-hover, or card-keyboard-focus states in Chromium, Firefox, and WebKit. Automated scanning does not replace evaluation with real assistive technology.
 
 ## Content validation
 
@@ -33,9 +35,9 @@ Axe found no serious or critical violations on the listing, empty state, owned d
 
 ## Browser and visual review
 
-- Chromium: 14/14 browser tests passed.
-- Firefox: 14/14 browser tests passed.
-- WebKit: 14/14 browser tests passed.
+- Chromium: 15/15 browser tests passed.
+- Firefox: 15/15 browser tests passed.
+- WebKit: 15/15 browser tests passed.
 - The 1440-pixel explorer, 390-pixel Cloud Strategy view, and 1440-pixel GlobalPay detail view were regenerated and inspected.
 - No unintended horizontal overflow was detected at tested widths or with 200% root text scaling.
 - Detail pages use a readable two-column desktop hierarchy and a single-column mobile reflow.
@@ -50,6 +52,8 @@ Axe found no serious or critical violations on the listing, empty state, owned d
 - Extended search to include technology roles, outcomes, caveats, and limitations.
 - Strengthened validation so a claim cannot reference a source omitted from its profile and a first-party outcome cannot omit its caveat.
 - Replaced stale screenshots and added a repeatable local capture command.
+- Added an evidence-aware, URL-backed comparison workspace with an explicit two-to-three-profile limit, no inferred scoring, and a visible explorer-page entry point.
+- Corrected comparison-control accessible names and text contrast after an automated axe scan identified the issues.
 
 ## Limits
 

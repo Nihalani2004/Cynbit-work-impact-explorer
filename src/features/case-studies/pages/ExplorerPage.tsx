@@ -4,9 +4,12 @@ import { useDocumentMetadata } from '../../../app/useDocumentMetadata'
 import { ArrowIcon } from '../../../components/Icons'
 import { CaseStudyCard } from '../components/CaseStudyCard'
 import { CategoryFilters } from '../components/CategoryFilters'
+import { ComparisonTray } from '../components/ComparisonTray'
 import { EmptyResults } from '../components/EmptyResults'
 import { SearchForm } from '../components/SearchForm'
 import { caseStudies } from '../data/caseStudies'
+import { useComparisonSelection } from '../hooks/useComparisonSelection'
+import { parseComparisonSelection, setComparisonSelection } from '../model/comparisonState'
 import { filterStudies, type ExplorerCriteria } from '../model/filterStudies'
 import { parseQuery, toSearchParams } from '../model/queryState'
 import {
@@ -27,6 +30,7 @@ const heroServices = [
 export function ExplorerPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const location = useLocation()
+  const comparison = useComparisonSelection()
   const { category, workType, query, invalidCategory, invalidWorkType } = parseQuery(location.search)
   const results = useMemo(
     () => filterStudies(caseStudies, { category, workType, query }),
@@ -70,7 +74,8 @@ export function ExplorerPage() {
         workType: patch.workType === undefined ? current.workType : patch.workType,
         query: patch.query === undefined ? current.query : patch.query,
       }
-      const params = toSearchParams(next)
+      const selectedSlugs = parseComparisonSelection(currentSearchParams.toString(), caseStudies).slugs
+      const params = setComparisonSelection(toSearchParams(next), selectedSlugs)
       return params.toString() === currentSearchParams.toString() ? currentSearchParams : params
     })
   }
@@ -84,7 +89,9 @@ export function ExplorerPage() {
   }
 
   function clearAll() {
-    if (searchParams.toString()) setSearchParams(new URLSearchParams())
+    if (searchParams.toString()) {
+      setSearchParams(setComparisonSelection(new URLSearchParams(), comparison.slugs))
+    }
   }
 
   const qualifiers = [
@@ -156,6 +163,18 @@ export function ExplorerPage() {
             <p><b>Cynbit-owned</b> identifies products and initiatives documented by Cynbit. <b>Cynbit-published</b> identifies project stories found on Cynbit's case-study pages; their client relationships and reported results were not independently confirmed. Numbered references and evidence limits appear on every profile.</p>
           </div>
 
+          <section className="comparison-entry" aria-labelledby="comparison-entry-title">
+            <div className="comparison-entry__mark" aria-hidden="true"><span>02</span><small>COMPARE</small></div>
+            <div>
+              <span className="eyebrow eyebrow--compact">Evidence-aware comparison</span>
+              <h3 id="comparison-entry-title">Compare the work behind the profiles.</h3>
+              <p>Select two or three profiles to review their documented objectives, technology, outcomes, limits and public sources side by side.</p>
+            </div>
+            <Link className="button button--primary comparison-entry__action" to={`/case-studies/compare${location.search}`}>
+              {comparison.studies.length > 0 ? 'Continue comparison' : 'Open comparison'} <ArrowIcon />
+            </Link>
+          </section>
+
           <div className="explorer-controls">
             <SearchForm key={query} query={query} onSearch={(value) => update({ query: value })} />
             <CategoryFilters
@@ -182,9 +201,24 @@ export function ExplorerPage() {
             </p>
           )}
 
+          <ComparisonTray
+            studies={comparison.studies}
+            search={location.search}
+            onRemove={comparison.remove}
+            onClear={comparison.clear}
+          />
+
           {results.length > 0 ? (
             <div className="study-grid">
-              {results.map((study) => <CaseStudyCard key={study.id} study={study} search={location.search} />)}
+              {results.map((study) => (
+                <CaseStudyCard
+                  key={study.id}
+                  study={study}
+                  search={location.search}
+                  selectedSlugs={comparison.slugs}
+                  onToggleComparison={comparison.toggle}
+                />
+              ))}
             </div>
           ) : <EmptyResults onClear={clearAll} />}
         </div>

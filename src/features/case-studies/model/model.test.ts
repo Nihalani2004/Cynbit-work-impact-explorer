@@ -3,6 +3,13 @@ import { caseStudies } from '../data/caseStudies'
 import { evidenceSources } from '../data/sources'
 import { filterStudies, normalizeQuery } from './filterStudies'
 import { parseQuery, toSearchParams } from './queryState'
+import {
+  maximumComparisonStudies,
+  parseComparisonSelection,
+  setComparisonSelection,
+  toggleComparisonSelection,
+  withoutComparisonSelection,
+} from './comparisonState'
 import type { CaseStudy } from './types'
 import { validateCatalog } from './validateCatalog'
 
@@ -97,5 +104,29 @@ describe('query state', () => {
     expect(parseQuery('?q=%20%20')).toEqual({
       category: null, workType: null, query: '', invalidCategory: false, invalidWorkType: false,
     })
+  })
+})
+
+describe('comparison query state', () => {
+  it('keeps valid profiles in selection order and safely removes invalid, duplicate and excess values', () => {
+    expect(parseComparisonSelection(
+      '?compare=tenantease,missing,tenantease,revio,bitelevate,cynbit-studio',
+      caseStudies,
+    )).toEqual({
+      slugs: ['tenantease', 'revio', 'bitelevate'],
+      ignoredValues: true,
+    })
+  })
+
+  it('serializes, toggles and removes comparison state without changing discovery criteria', () => {
+    const params = setComparisonSelection(
+      new URLSearchParams('category=software&type=product&q=payments'),
+      ['tenantease', 'revio', 'tenantease', 'bitelevate', 'cynbit-studio'],
+    )
+    expect(params.toString()).toBe('category=software&type=product&q=payments&compare=tenantease%2Crevio%2Cbitelevate')
+    expect(toggleComparisonSelection(['tenantease'], 'revio')).toEqual(['tenantease', 'revio'])
+    expect(toggleComparisonSelection(['tenantease', 'revio'], 'tenantease')).toEqual(['revio'])
+    expect(toggleComparisonSelection(['tenantease', 'revio', 'bitelevate'], 'cynbit-studio')).toHaveLength(maximumComparisonStudies)
+    expect(withoutComparisonSelection(`?${params}`)).toBe('?category=software&type=product&q=payments')
   })
 })

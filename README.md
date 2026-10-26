@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/React-19-087e8b?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7-646cff?logo=vite&logoColor=white)](https://vite.dev/)
-[![Tests](https://img.shields.io/badge/tests-61%20passing-087e8b)](#quality-assurance)
+[![Tests](https://img.shields.io/badge/tests-67%20passing-087e8b)](#quality-assurance)
 
 ![Cynbit Work & Impact desktop explorer](docs/screenshots/explorer-desktop.png)
 
@@ -17,7 +17,7 @@ The experience is designed to answer three questions immediately:
 
 1. **What work is represented?** Seventeen public profiles across software development, cloud strategy, and digital marketing.
 2. **What can be trusted?** Every profile distinguishes Cynbit-owned work from Cynbit-published case studies and exposes its evidence limits.
-3. **How do I explore it?** Search, category controls, related profiles, and URL-backed navigation make the collection quick to browse and easy to return to.
+3. **How do I explore and evaluate it?** Search, category controls, related profiles, side-by-side comparison, and URL-backed navigation make the collection quick to browse and easy to revisit.
 
 ## What was improved
 
@@ -29,6 +29,7 @@ The experience is designed to answer three questions immediately:
 | Shallow project presentation | Reusable detail views for context, objectives, challenges, solution, execution, technology, outcomes, evidence limits, and related work |
 | Generic first-load experience | A short, accessible entrance sequence for the header, hero story, service orbit, and featured profile |
 | Inconsistent navigation state | URL-backed search and filters retained through details, related links, reload, and browser Back/Forward |
+| Difficult to evaluate profiles together | An evidence-aware comparison workspace keeps two or three selected profiles, their sources, limitations, and discovery state in the URL |
 | Accessibility gaps | Semantic controls, keyboard navigation, focus treatment, live result announcements, skip navigation, reduced-motion support, and automated axe checks |
 
 ## Experience highlights
@@ -36,6 +37,7 @@ The experience is designed to answer three questions immediately:
 - **17 documented profiles**: four Cynbit-owned products or initiatives and thirteen Cynbit-published case studies.
 - **Three preserved service categories**: Software Development (13), Cloud Strategy (3), and Digital Marketing (3).
 - **Evidence-first detail pages**: source references, outcome attribution, and limitations live alongside the project narrative.
+- **Evidence-aware comparison**: select two or three profiles and compare objectives, challenges, implementation, technology, outcomes, limits, and public sources without inventing a score.
 - **Professional discovery flow**: responsive card grid, focused card hover/focus treatment, related work, and a compact header logo reconstructed as a scalable SVG.
 - **Thoughtful motion**: the active card rises while peer content stays fully readable; only decorative artwork becomes slightly subdued. Motion is disabled for users who prefer reduced motion.
 
@@ -47,9 +49,11 @@ flowchart TD
   B --> C[Typed profile catalog<br/>owned + published work]
   C --> D[Catalog validation<br/>IDs, slugs, source links, outcomes]
   D --> E[Explorer model<br/>query parsing + filtering]
-  E <--> F[URL state<br/>category · type · q]
+  E <--> F[URL state<br/>category · type · q · compare]
   E --> G[Explorer page<br/>search, filters, counts, cards]
   C --> H[Reusable detail page<br/>context, evidence, limits]
+  C --> L[Comparison workspace<br/>side-by-side sourced evidence]
+  L <--> F
   G --> H
   H --> I[Related profiles + return link]
   I --> F
@@ -66,10 +70,11 @@ src/
   app/                         routing, route focus, error boundary
   components/                  header, footer, logo, shared icons
   features/case-studies/
-    components/                cards, filters, sources, outcomes, related work
+    components/                cards, filters, comparison, sources, outcomes, related work
     data/                      profiles and source ledger
-    model/                     types, validation, filtering, URL query state
-    pages/                     explorer and reusable detail page
+    hooks/                     shared URL-backed comparison selection
+    model/                     types, validation, filtering, query and comparison state
+    pages/                     explorer, comparison workspace, and reusable detail page
   styles/                      design tokens and responsive styles
 tests/e2e/                     browser journeys and automated accessibility checks
 docs/                          audit, content evidence, decisions, and validation notes
@@ -133,7 +138,7 @@ This repository is ready for a Git-connected Vercel deployment. [vercel.json](ve
 3. Import `Nihalani2004/Cynbit-work-impact-explorer` and approve access when prompted.
 4. Keep the repository root as the root directory. Vercel detects Vite; confirm the build command is `npm run build` and the output directory is `dist`.
 5. Select **Deploy**. The first deployment creates a production URL ending in `vercel.app`.
-6. Open the production URL and verify `/case-studies`, a direct detail URL such as `/case-studies/tenantease`, a refresh on that detail page, a combined search/filter URL, and browser Back/Forward.
+6. Open the production URL and verify `/case-studies`, a direct detail URL such as `/case-studies/tenantease`, a refresh on that detail page, a combined search/filter URL, `/case-studies/compare?compare=cynbit-studio,tenantease`, and browser Back/Forward.
 7. Under **Settings → Domains**, optionally add a custom domain. Under **Settings → Git**, keep `main` as the production branch.
 
 No environment variables, private APIs, or database configuration are required. Each subsequent push to `main` creates a production deployment; pull requests receive preview deployments.
@@ -146,12 +151,12 @@ The latest local verification completed successfully:
 | --- | --- |
 | ESLint | Passed |
 | TypeScript | Passed |
-| Unit and component tests | 19 passed |
-| Chromium end-to-end tests | 14 passed |
-| Automated serious/critical axe violations | None found on listing, empty-state, detail, hover, and keyboard-focus journeys |
+| Unit and component tests | 22 passed |
+| Browser end-to-end tests | 45 passed across Chromium, Firefox, and WebKit |
+| Automated serious/critical axe violations | None found on listing, empty-state, detail, comparison, hover, and keyboard-focus journeys |
 | Production build | Passed |
 
-The browser coverage includes filtering, contextual facet counts, multi-criteria search, invalid query recovery, URL synchronization, Back/Forward behavior, direct detail routes, refreshes, retained return state, keyboard navigation, responsive layouts, console errors, metadata, and default plus hover/focus accessibility journeys.
+The browser coverage includes filtering, contextual facet counts, multi-criteria search, invalid query recovery, URL synchronization, Back/Forward behavior, direct detail routes, refreshes, retained return state, comparison selection and recovery, keyboard navigation, responsive layouts, console errors, metadata, and default plus hover/focus accessibility journeys.
 
 ## Demo journey
 
@@ -159,7 +164,7 @@ The browser coverage includes filtering, contextual facet counts, multi-criteria
 2. Choose **Published case studies**, select **Software Development**, and search for `Kubernetes`.
 3. Open **GlobalPay** to review technology, a Cynbit-reported outcome, evidence limits, and sources.
 4. Return to results and confirm the category, type, and search query remain in place.
-5. Switch to **Cloud Strategy** and compare Cloudy Tales, CarePlus Health, and BitElevate.
+5. Select **Cloudy Tales**, **CarePlus Health**, and **BitElevate**, then use **Compare profiles** to review their sourced evidence side by side.
 6. Search for `no-such-work`, then use the empty-state recovery control.
 7. Open `/case-studies/healthcare-cloud-migration` directly and refresh to verify the deep route.
 

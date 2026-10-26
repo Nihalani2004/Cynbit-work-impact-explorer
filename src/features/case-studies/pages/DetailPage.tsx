@@ -3,11 +3,14 @@ import { useDocumentMetadata } from '../../../app/useDocumentMetadata'
 import { ArrowIcon } from '../../../components/Icons'
 import { NotFoundPage } from '../../../pages/NotFoundPage'
 import { SourceCitations, SourceList } from '../components/EvidenceReferences'
+import { ComparisonToggle } from '../components/ComparisonToggle'
+import { ComparisonTray } from '../components/ComparisonTray'
 import { OutcomePanel } from '../components/OutcomePanel'
 import { RelatedStudies } from '../components/RelatedStudies'
 import { StudyArtwork } from '../components/StudyArtwork'
 import { caseStudies } from '../data/caseStudies'
 import { evidenceSources } from '../data/sources'
+import { useComparisonSelection } from '../hooks/useComparisonSelection'
 import {
   categoryLabels,
   verificationLabels,
@@ -42,6 +45,7 @@ export function DetailPage() {
   const { slug } = useParams()
   const location = useLocation()
   const study = caseStudies.find((item) => item.slug === slug)
+  const comparison = useComparisonSelection()
 
   useDocumentMetadata({
     title: study ? `${study.title} | Cynbit Work & Impact` : 'Work Profile Not Found | Cynbit Work & Impact',
@@ -80,9 +84,19 @@ export function DetailPage() {
             <div className="detail-hero__tags" aria-label="Topics">
               {study.tags.map((tag) => <span key={tag}>{tag}</span>)}
             </div>
+            <div className="detail-hero__actions">
+              <ComparisonToggle study={study} selectedSlugs={comparison.slugs} onToggle={comparison.toggle} />
+            </div>
           </div>
           <StudyArtwork category={study.categories[0]} order={study.displayOrder} />
         </div>
+
+        <ComparisonTray
+          studies={comparison.studies}
+          search={location.search}
+          onRemove={comparison.remove}
+          onClear={comparison.clear}
+        />
 
         <div className="detail-content">
           <aside className="detail-content__aside" aria-label="Work profile summary">

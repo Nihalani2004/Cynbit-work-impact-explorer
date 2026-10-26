@@ -1,11 +1,17 @@
 import { Link } from 'react-router'
 import { ArrowIcon } from '../../../components/Icons'
 import { categoryLabels, measurementLabels, verificationLabels, workTypeLabels, type CaseStudy } from '../model/types'
+import { ComparisonToggle } from './ComparisonToggle'
 import { StudyArtwork } from './StudyArtwork'
 
-type Props = { study: CaseStudy; search: string }
+type Props = {
+  study: CaseStudy
+  search: string
+  selectedSlugs: readonly string[]
+  onToggleComparison: (slug: string) => void
+}
 
-export function CaseStudyCard({ study, search }: Props) {
+export function CaseStudyCard({ study, search, selectedSlugs, onToggleComparison }: Props) {
   const featuredOutcome = study.outcomes.find((outcome) => outcome.value)
 
   return (
@@ -32,6 +38,9 @@ export function CaseStudyCard({ study, search }: Props) {
           <span className="study-card__action">Read documented profile <ArrowIcon /></span>
         </div>
       </Link>
+      <div className="study-card__compare">
+        <ComparisonToggle study={study} selectedSlugs={selectedSlugs} onToggle={onToggleComparison} />
+      </div>
     </article>
   )
 }

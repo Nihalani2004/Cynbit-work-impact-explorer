@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-route
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
 import { DetailPage } from '../features/case-studies/pages/DetailPage'
+import { ComparisonPage } from '../features/case-studies/pages/ComparisonPage'
 import { ExplorerPage } from '../features/case-studies/pages/ExplorerPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { ErrorBoundary } from './ErrorBoundary'
@@ -31,6 +32,7 @@ function AppShell() {
       <Routes>
         <Route path="/" element={<Navigate to="/case-studies" replace />} />
         <Route path="/case-studies" element={<ExplorerPage />} />
+        <Route path="/case-studies/compare" element={<ComparisonPage />} />
         <Route path="/case-studies/:slug" element={<DetailPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

@@ -3,6 +3,7 @@ import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router'
 import { DetailPage } from './DetailPage'
+import { ComparisonPage } from './ComparisonPage'
 import { ExplorerPage } from './ExplorerPage'
 
 afterEach(cleanup)
@@ -18,6 +19,7 @@ function renderExplorer(entry = '/case-studies') {
       <LocationProbe />
       <Routes>
         <Route path="/case-studies" element={<ExplorerPage />} />
+        <Route path="/case-studies/compare" element={<ComparisonPage />} />
         <Route path="/case-studies/:slug" element={<DetailPage />} />
       </Routes>
     </MemoryRouter>,
@@ -96,5 +98,26 @@ describe('work explorer interactions', () => {
     renderExplorer('/case-studies?category=invalid&type=unknown')
     expect(screen.getByText('Those category and work-type filters are unavailable. Showing all values instead.')).toBeVisible()
     expect(screen.getAllByRole('article')).toHaveLength(17)
+  })
+
+  it('builds a URL-backed comparison that retains the discovery state', async () => {
+    const user = userEvent.setup()
+    renderExplorer('/case-studies?category=software')
+
+    expect(screen.getByRole('link', { name: 'Open comparison' })).toHaveAttribute('href', '/case-studies/compare?category=software')
+    await user.click(screen.getByRole('button', { name: 'Add to comparison: Cynbit Studio' }))
+    await user.click(screen.getByRole('button', { name: 'Add to comparison: TenantEase' }))
+    expect(screen.getByRole('complementary', { name: 'Comparison selection' })).toHaveTextContent('2 of 3 profiles selected')
+    expect(screen.getByRole('link', { name: 'Continue comparison' })).toBeVisible()
+    expect(screen.getByTestId('location')).toHaveTextContent('/case-studies?category=software&compare=cynbit-studio%2Ctenantease')
+
+    await user.click(screen.getByRole('link', { name: 'Compare profiles' }))
+    expect(screen.getByRole('heading', { name: 'Compare the public record.' })).toBeVisible()
+    expect(screen.getByRole('rowheader', { name: 'Technology and capability' })).toBeVisible()
+    expect(screen.getAllByText('No project-specific technology is publicly documented.')).toHaveLength(2)
+
+    await user.click(screen.getAllByRole('button', { name: 'Remove Cynbit Studio from comparison' })[0])
+    expect(screen.getByText('Choose one more profile to compare.')).toBeVisible()
+    expect(screen.getByTestId('location')).toHaveTextContent('/case-studies/compare?category=software&compare=tenantease')
   })
 })
